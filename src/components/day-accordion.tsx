@@ -1,13 +1,13 @@
+import React from "react";
 import moment from "moment";
 
 import { Divider, List, ListItem } from "@mui/material";
 
-import { ITimeSerie } from "../layout/weather-app";
+import { ITimeSerie } from "../model/time-serie.model";
 
 import AccordionContainer from "./accordion-container";
 import DayAccordionSummary from "./day-accordion-summary";
 import HourlyForcastListItem from "./hourly-forcast-list-item";
-import React from "react";
 
 interface IDayAccordionProps {
   middayForcast: ITimeSerie;

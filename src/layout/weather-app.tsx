@@ -1,53 +1,13 @@
 import { useEffect, useState } from "react";
 import moment from "moment";
 
-import {
-  Alert,
-  Box,
-  Button,
-  List,
-  TextField,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Alert, Button, List, Typography } from "@mui/material";
 
 import DayAccordion from "../components/day-accordion";
 import Loading from "../components/loading";
+import { ITimeSerie } from "../model/time-serie.model";
+import InputTextField from "../components/imput-text-field";
 
-export interface ITimeSerie {
-  validTime: string;
-  parameters: IParameter[];
-}
-
-interface IParameter {
-  name: string;
-  levelType: string;
-  level: number;
-  unit: string;
-  values: number[];
-}
-
-interface IInputTextField {
-  label: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-const InputTextField = (props: IInputTextField) => {
-  const { label, value, onChange } = props;
-
-  const theme = useTheme();
-  return (
-    <TextField
-      size="small"
-      label={label}
-      type="input"
-      value={value}
-      onChange={onChange}
-      sx={{ m: 0.5, backgroundColor: theme.palette.background.paper }}
-    />
-  );
-};
 export const WeatherApp = () => {
   const [isLoaded, setIsLoaded] = useState(true);
   const [hasError, setHasError] = useState(false);
