@@ -1,7 +1,7 @@
 {
   "name": "code-case-emilia-frisell",
   "version": "0.1.0",
-  "homepage": "https://emiliafrisell.github.io/react-gh-pages",
+  "homepage": "https://emiliafrisell.github.io/etimo-code-case/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",
