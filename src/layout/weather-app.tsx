@@ -11,7 +11,7 @@ import DayAccordion from "../components/day-accordion";
 import InputTextField from "../components/imput-text-field";
 
 export const WeatherApp = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const [hasError, setHasError] = useState(false);
 
   const [lon, setLon] = useState("18.0686");
@@ -20,9 +20,11 @@ export const WeatherApp = () => {
   const [tenDayForcast, setTenDayForcast] = useState([] as ITimeSerie[]);
   const [location, setLocation] = useState("");
 
-  console.log(isLoaded);
-
   const handleGetWeather = (lon: string, lat: string) => {
+    setIsLoaded(false);
+    setHasError(false);
+    setLocation("");
+
     const SMHI_API_URL = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${lon}/lat/${lat}/data.json`;
     const OPENWEATHER_API_URL = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=5&appid=${ACCESS_KEY}`;
 
@@ -76,11 +78,11 @@ export const WeatherApp = () => {
       {isLoaded ? (
         hasError ? (
           location ? (
-            <Alert color="warning" sx={{ m: 1 }}>
+            <Alert color="warning" sx={{ my: 1 }}>
               Coorinates for {location} are out of bounds
             </Alert>
           ) : (
-            <Alert sx={{ m: 1 }} color="error">
+            <Alert sx={{ my: 1 }} color="error">
               Make sure to enter correct coordinates
             </Alert>
           )
