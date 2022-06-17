@@ -7,9 +7,10 @@ import DayAccordion from "../components/day-accordion";
 import Loading from "../components/loading";
 import { ITimeSerie } from "../model/time-serie.model";
 import InputTextField from "../components/imput-text-field";
+import { ACCESS_KEY } from "../config/config";
 
 export const WeatherApp = () => {
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   const [lon, setLon] = useState("18.0686");
@@ -18,31 +19,30 @@ export const WeatherApp = () => {
   const [tenDayForcast, setTenDayForcast] = useState([] as ITimeSerie[]);
   const [location, setLocation] = useState("");
 
-  // useEffect(() => {
-  //   return () => {
-  //     setLon("");
-  //     setLat("");
-  //     setLocation("");
-  //   };
-  // }, []);
+  useEffect(() => {
+    console.log(isLoaded);
+  }, [isLoaded]);
 
-  const getLocation = () => {
-    const ACCESS_KEY = "d4afb603a00dd5814d9ff407e2f8a47c";
+  console.log(isLoaded);
 
-    const API_URL = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=5&appid=${ACCESS_KEY}`;
-    fetch(API_URL)
-      .then((response) => {
-        const error = !response.ok;
-        console.log(API_URL);
-        if (error) {
-          throw Error(response.statusText);
+  const handleGetWeather = (lon: string, lat: string) => {
+    const SMHI_API_URL = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${lon}/lat/${lat}/data.json`;
+    const OPENWEATHER_API_URL = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=5&appid=${ACCESS_KEY}`;
+
+    Promise.all([fetch(SMHI_API_URL), fetch(OPENWEATHER_API_URL)])
+      .then((responses) => {
+        const errors = responses.filter((response) => !response.ok);
+
+        if (errors.length > 0) {
+          throw errors.map((response) => Error(response.statusText));
         }
 
-        return response.json();
+        const json = responses.map((response) => response.json());
+        return Promise.all(json);
       })
       .then((result) => {
-        console.log(result[0].name);
-        setLocation(result[0].name);
+        setTenDayForcast(result[0].timeSeries);
+        setLocation(result[1][0].name);
       })
       .catch((error) => {
         console.error(error);
@@ -50,34 +50,6 @@ export const WeatherApp = () => {
       })
       .finally(() => {
         setIsLoaded(true);
-      });
-  };
-
-  const handleGetWeather = (lon: string, lat: string) => {
-    const API_URL = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${lon}/lat/${lat}/data.json`;
-    setIsLoaded(false);
-    setHasError(false);
-
-    fetch(API_URL)
-      .then((response) => {
-        const error = !response.ok;
-
-        if (error) {
-          throw Error(response.statusText);
-        }
-
-        return response.json();
-      })
-      .then((result) => {
-        setTenDayForcast(result.timeSeries);
-      })
-      .catch((error) => {
-        console.error(error);
-        setHasError(true);
-      })
-      .finally(() => {
-        // setIsLoaded(true);
-        getLocation();
       });
   };
 
@@ -104,42 +76,50 @@ export const WeatherApp = () => {
       >
         Visa väderprognos
       </Button>
-      {hasError && (
-        <Alert color="error">Make sure to enter correct coordinates</Alert>
-      )}
       {isLoaded ? (
-        !hasError &&
-        tenDayForcast.length > 0 && (
-          <>
-            {location && (
-              <Typography variant="h2" sx={{ mt: 4 }}>
-                {location}
+        hasError ? (
+          location ? (
+            <Alert color="warning" sx={{ m: 1 }}>
+              Coorinates for {location} are out of bounds
+            </Alert>
+          ) : (
+            <Alert sx={{ m: 1 }} color="error">
+              Make sure to enter correct coordinates
+            </Alert>
+          )
+        ) : (
+          tenDayForcast.length > 0 && (
+            <>
+              {location && (
+                <Typography variant="h2" sx={{ mt: 4 }}>
+                  {location}
+                </Typography>
+              )}
+              <Typography gutterBottom sx={{ mt: 5 }}>
+                Here is your weather forcast for over the next 10 days. You can
+                select a day from the list for a more detailed prognosis.
               </Typography>
-            )}
-            <Typography gutterBottom sx={{ mt: 5 }}>
-              Here is your weather forcast for over the next 10 days. You can
-              select a day from the list for a more detailed prognosis.
-            </Typography>
-            <List>
-              {tenDayForcast.map((forcast, index) => {
-                const filteredForcasts = tenDayForcast.filter(
-                  (forc) =>
-                    moment(forc.validTime).date() ===
-                    moment(forcast.validTime).date()
-                );
+              <List>
+                {tenDayForcast.map((forcast, index) => {
+                  const filteredForcasts = tenDayForcast.filter(
+                    (forc) =>
+                      moment(forc.validTime).date() ===
+                      moment(forcast.validTime).date()
+                  );
 
-                return (
-                  Number(moment(forcast.validTime).hour()) - 2 === 12 && (
-                    <DayAccordion
-                      key={index}
-                      middayForcast={forcast}
-                      dailyForcast={filteredForcasts}
-                    />
-                  )
-                );
-              })}
-            </List>
-          </>
+                  return (
+                    Number(moment(forcast.validTime).hour()) - 2 === 12 && (
+                      <DayAccordion
+                        key={index}
+                        middayForcast={forcast}
+                        dailyForcast={filteredForcasts}
+                      />
+                    )
+                  );
+                })}
+              </List>
+            </>
+          )
         )
       ) : (
         <Loading />
