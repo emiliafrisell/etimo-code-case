@@ -8,6 +8,7 @@ import { ITimeSerie } from "../model/time-serie.model";
 import AccordionContainer from "./accordion-container";
 import DayAccordionSummary from "./day-accordion-summary";
 import HourlyForcastListItem from "./hourly-forcast-list-item";
+import { IParameter } from "../model/parameter.model";
 
 interface IDayAccordionProps {
   middayForcast: ITimeSerie;
@@ -27,13 +28,13 @@ export const DayAccordion = (props: IDayAccordionProps) => {
   ];
 
   const formattedDate = moment(middayForcast.validTime).format("D MMMM");
-  const temperature = middayForcast?.parameters?.find(
-    (param) => param.name === "t"
-  )?.values[0];
 
-  const weatherIconIndex = middayForcast?.parameters?.find(
-    (param) => param.name === "Wsymb2"
-  )?.values[0];
+  const getTemperature = (parameters: IParameter[]) => {
+    return parameters?.find((param) => param.name === "t")?.values[0];
+  };
+  const getWeatherIconIndex = (parameters: IParameter[]) => {
+    return parameters?.find((param) => param.name === "Wsymb2")?.values[0];
+  };
 
   const getDayOfWeek = () => {
     const selectedDate = moment(middayForcast.validTime);
@@ -56,29 +57,24 @@ export const DayAccordion = (props: IDayAccordionProps) => {
           <DayAccordionSummary
             dayOfWeek={getDayOfWeek()}
             date={formattedDate}
-            temperature={temperature}
-            weatherIconIndex={weatherIconIndex}
+            temperature={getTemperature(middayForcast.parameters)}
+            weatherIconIndex={getWeatherIconIndex(middayForcast.parameters)}
           />
         }
       >
         <Divider />
         <List disablePadding>
           {dailyForcast?.map((forcast, index) => {
-            const weatherIconIndex = forcast?.parameters?.find(
-              (param) => param.name === "Wsymb2"
-            )?.values[0];
             const time = moment(forcast.validTime).format("HH:00");
-            const temperature = forcast?.parameters?.find(
-              (param) => param.name === "t"
-            )?.values[0];
+
             const isLastItem = index === dailyForcast.length - 1;
 
             return (
               <React.Fragment key={index}>
                 <HourlyForcastListItem
                   time={time}
-                  temperature={temperature}
-                  weatherIconIndex={weatherIconIndex}
+                  temperature={getTemperature(forcast.parameters)}
+                  weatherIconIndex={getWeatherIconIndex(forcast.parameters)}
                 />
                 {!isLastItem && <Divider />}
               </React.Fragment>
