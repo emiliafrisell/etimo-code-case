@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import moment from "moment";
 
 import { Alert, Button, List, Typography } from "@mui/material";
 
-import DayAccordion from "../components/day-accordion";
-import Loading from "../components/loading";
 import { ITimeSerie } from "../model/time-serie.model";
-import InputTextField from "../components/imput-text-field";
 import { ACCESS_KEY } from "../config/config";
+
+import Loading from "../components/loading";
+import DayAccordion from "../components/day-accordion";
+import InputTextField from "../components/imput-text-field";
 
 export const WeatherApp = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -18,10 +19,6 @@ export const WeatherApp = () => {
 
   const [tenDayForcast, setTenDayForcast] = useState([] as ITimeSerie[]);
   const [location, setLocation] = useState("");
-
-  useEffect(() => {
-    console.log(isLoaded);
-  }, [isLoaded]);
 
   console.log(isLoaded);
 
@@ -74,7 +71,7 @@ export const WeatherApp = () => {
         onClick={() => handleGetWeather(lon, lat)}
         sx={{ m: 0.5 }}
       >
-        Visa väderprognos
+        Show weather prognosis
       </Button>
       {isLoaded ? (
         hasError ? (
