@@ -1,7 +1,7 @@
 # etimo-code-case
 Code Case given by Etimo
 
-Create a simple wether prognosis-app with React, Angular or Vue that is ru in the browser and works like this;
+Create a simple wether prognosis-app with React, Angular or Vue that is run in the browser and works like this;
 
 1. Fill in longitude and latitude in a text field and click the 'Show prognosis'-button
 
