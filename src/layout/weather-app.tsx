@@ -81,11 +81,11 @@ export const WeatherApp = () => {
       {isLoaded ? (
         hasError ? (
           location ? (
-            <Alert color="warning" sx={{ my: 1 }}>
+            <Alert severity="warning" sx={{ my: 1 }}>
               Coorinates for {location} are out of bounds
             </Alert>
           ) : (
-            <Alert color="error" sx={{ my: 1 }}>
+            <Alert severity="error" sx={{ my: 1 }}>
               Make sure to enter correct coordinates
             </Alert>
           )
