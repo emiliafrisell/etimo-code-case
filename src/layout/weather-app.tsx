@@ -55,7 +55,8 @@ export const WeatherApp = () => {
   return (
     <>
       <Typography gutterBottom>
-        Fill in the logitude and latitude of your desired location
+        To see the weather forcast, fill in the logitude and latitude of your
+        desired location (e.g. these coordinates for Stockholm)
       </Typography>
 
       <InputTextField
@@ -73,7 +74,9 @@ export const WeatherApp = () => {
         onClick={() => handleGetWeather(lon, lat)}
         sx={{ m: 0.5 }}
       >
-        Show weather prognosis
+        {tenDayForcast.length > 0
+          ? "Update weather prognosis"
+          : "Show weather prognosis"}
       </Button>
       {isLoaded ? (
         hasError ? (
@@ -95,7 +98,7 @@ export const WeatherApp = () => {
                 </Typography>
               )}
               <Typography gutterBottom sx={{ mt: 5 }}>
-                Here is your weather forcast for over the next 10 days. You can
+                Here is your weather forcast for the next 10 days. You can
                 select a day from the list for a more detailed prognosis.
               </Typography>
               <List>
