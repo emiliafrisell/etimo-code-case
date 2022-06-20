@@ -1,14 +1,14 @@
 import React from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 
 import { Divider, List, ListItem } from "@mui/material";
 
 import { ITimeSerie } from "../model/time-serie.model";
+import { IParameter } from "../model/parameter.model";
 
 import AccordionContainer from "./accordion-container";
 import DayAccordionSummary from "./day-accordion-summary";
 import HourlyForcastListItem from "./hourly-forcast-list-item";
-import { IParameter } from "../model/parameter.model";
 
 interface IDayAccordionProps {
   middayForcast: ITimeSerie;
@@ -27,7 +27,7 @@ export const DayAccordion = (props: IDayAccordionProps) => {
     "Saturday",
   ];
 
-  const formattedDate = moment(middayForcast.validTime).format("D MMMM");
+  const formattedDate = dayjs(middayForcast.validTime).format("D MMMM");
 
   const getTemperature = (parameters: IParameter[]) => {
     return parameters?.find((param) => param.name === "t")?.values[0];
@@ -37,13 +37,14 @@ export const DayAccordion = (props: IDayAccordionProps) => {
   };
 
   const getDayOfWeek = () => {
-    const selectedDate = moment(middayForcast.validTime);
-    if (moment().format("YYMMDD") === selectedDate.format("YYMMDD")) {
+    const selectedDate = dayjs(middayForcast.validTime);
+    const isToday = dayjs().format("YYMMDD") === selectedDate.format("YYMMDD");
+    const isTomorrow =
+      dayjs().add(1, "days").format("YYMMDD") === selectedDate.format("YYMMDD");
+
+    if (isToday) {
       return "Today";
-    } else if (
-      moment().add(1, "days").format("YYMMDD") ===
-      selectedDate.add("days").format("YYMMDD")
-    ) {
+    } else if (isTomorrow) {
       return "Tomorrow";
     } else {
       return daysOfWeek[selectedDate.day()];
@@ -65,7 +66,7 @@ export const DayAccordion = (props: IDayAccordionProps) => {
         <Divider />
         <List disablePadding>
           {dailyForcast?.map((forcast, index) => {
-            const time = moment(forcast.validTime).format("HH:00");
+            const time = dayjs(forcast.validTime).format("HH:00");
 
             const isLastItem = index === dailyForcast.length - 1;
 

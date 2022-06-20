@@ -1,5 +1,5 @@
 import { useState } from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 
 import { Alert, Button, List, Typography } from "@mui/material";
 
@@ -85,7 +85,7 @@ export const WeatherApp = () => {
               Coorinates for {location} are out of bounds
             </Alert>
           ) : (
-            <Alert sx={{ my: 1 }} color="error">
+            <Alert color="error" sx={{ my: 1 }}>
               Make sure to enter correct coordinates
             </Alert>
           )
@@ -98,19 +98,21 @@ export const WeatherApp = () => {
                 </Typography>
               )}
               <Typography gutterBottom sx={{ mt: 5 }}>
-                Here is your weather forcast for the next 10 days. You can
-                select a day from the list for a more detailed prognosis.
+                Here is your weather forcast for the next 10 days. Select a day
+                from the list for a more detailed prognosis.
               </Typography>
               <List>
                 {tenDayForcast.map((forcast, index) => {
+                  const isTwelveOclock =
+                    Number(dayjs(forcast.validTime).hour()) - 2 === 12;
                   const filteredForcasts = tenDayForcast.filter(
                     (forc) =>
-                      moment(forc.validTime).date() ===
-                      moment(forcast.validTime).date()
+                      dayjs(forc.validTime).date() ===
+                      dayjs(forcast.validTime).date()
                   );
 
                   return (
-                    Number(moment(forcast.validTime).hour()) - 2 === 12 && (
+                    isTwelveOclock && (
                       <DayAccordion
                         key={index}
                         middayForcast={forcast}
