@@ -9,11 +9,12 @@ const InputTextField = (props: IInputTextField) => {
   const { label, value, onChange } = props;
 
   const theme = useTheme();
+
   return (
     <TextField
       size="small"
       label={label}
-      type="input"
+      type="number"
       value={value}
       onChange={onChange}
       sx={{ m: 0.5, backgroundColor: theme.palette.background.paper }}
