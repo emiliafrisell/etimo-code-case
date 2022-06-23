@@ -26,7 +26,7 @@ export const WeatherApp = () => {
     setLocation("");
 
     const SMHI_API_URL = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${lon}/lat/${lat}/data.json`;
-    const OPENWEATHER_API_URL = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=5&appid=${ACCESS_KEY}`;
+    const OPENWEATHER_API_URL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=5&appid=${ACCESS_KEY}`;
 
     Promise.all([fetch(SMHI_API_URL), fetch(OPENWEATHER_API_URL)])
       .then((responses) => {
