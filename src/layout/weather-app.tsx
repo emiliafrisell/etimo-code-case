@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { Alert, Button, List, Typography } from "@mui/material";
 
 import { ITimeSerie } from "../model/time-serie.model";
-import { ACCESS_KEY } from "../config/config";
+import { ACCESS_KEY } from "../config/constants";
 
 import Loading from "../components/loading";
 import DayAccordion from "../components/day-accordion";
@@ -75,8 +75,8 @@ export const WeatherApp = () => {
         sx={{ m: 0.5 }}
       >
         {tenDayForcast.length > 0
-          ? "Update weather prognosis"
-          : "Show weather prognosis"}
+          ? "Update weather forcast"
+          : "Show weather forcast"}
       </Button>
       {isLoaded ? (
         hasError ? (
@@ -122,6 +122,7 @@ export const WeatherApp = () => {
                   );
                 })}
               </List>
+              <Typography textAlign="right">Source: SMHI</Typography>
             </>
           )
         )
