@@ -1,6 +1,6 @@
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { LOCALE } from "../config/constants";
 
+import { LOCALE } from "../config/constants";
 import { weatherIcons } from "../config/weather-icons";
 
 interface IWeatherIconProps {

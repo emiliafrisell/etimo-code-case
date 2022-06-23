@@ -1,5 +1,6 @@
-import { Grid } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { Grid } from "@mui/material";
 
 export const Loading = () => (
   <Grid
